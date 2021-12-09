@@ -1,0 +1,5 @@
+pyvo==1.1
+astropy==4.3.1
+astroquery==0.4.4
+numpy==1.20.3
+ipyaladin==0.1.9
