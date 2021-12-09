@@ -24,21 +24,11 @@ class Hermes():
         #return self.filters
         pass
 
-    def saveHermes(self,name = '', path = ''):
-        import json        
-        if name == '':
-            with open('save.Hermes', 'w') as fout:
-                json.dump(self.dummy, fout)
-        else:
-            with open('{}.Hermes'.format(name) , 'w') as fout:
-                json.dump(self.dummy, fout)        
+    def saveHermes(self, path = ''):
+        # guardar estado de objeto en archivo .hermes
         return 
 
-    def loadHermes(self, filename):
-        import json 
-        file=open(filename,"r")
-        data = json.load(file)            
-        self.dummy=data
+    def loadHermes(self,  init_filename = None):
         # guardar estado de objeto en archivo .hermes
         return 
 
@@ -47,9 +37,3 @@ class Hermes():
 
     def addTable(self, data):
         pass
-
-a=Hermes()
-a.saveHermes()
-input()
-a.loadHermes("save.Hermes")
-print(a.dummy)
