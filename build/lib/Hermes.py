@@ -61,6 +61,7 @@ class Hermes():
         import json        
         if name == '':
             with open('save.Hermes', 'w') as fout:
+                print(self.filters)
                 json.dump(self.filters, fout)
         else:
             with open('{}.Hermes'.format(name) , 'w') as fout:
@@ -68,7 +69,8 @@ class Hermes():
         return
 
     def loadHermes(self,    filename=''):
-        import json         
+        import json 
+        
         if filename != '':            
             file=open(filename,"r")
         else:
