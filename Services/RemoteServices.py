@@ -39,7 +39,7 @@ class RemoteServices():
                 self.query_parameters['coordinates'] = coord.SkyCoord(f'{ra} {dec}', unit=(u.hourangle, u.deg))
 
             elif (param == 'search_type'):
-                self.query_parameters['search_type'] = filters[param] 
+                self.query_parameters['search_type']['type'] = self.query_parameters['search_type']['type'] 
                 self.query_parameters['search_type']['radius'] = self.query_parameters['search_type']['radius']*u.arcsec
                     
                 
