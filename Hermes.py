@@ -5,6 +5,10 @@ from multipledispatch import dispatch
 
 from Services.RemoteServices import RemoteServices
 
+from ipyaladin import Aladin
+from ipywidgets import Layout, Box, widgets
+
+
 class Hermes():
     def __init__(self, dummy = {"test": "helloWorld", "test2": [1,2,3], "test3": ["1", "2", "3"]}):
         self.dummy = dummy
@@ -61,8 +65,35 @@ class Hermes():
         # guardar estado de objeto en archivo .hermes
         return 
 
-    def generateVisualization(self):
-        pass 
+    def generateVisualization(self, type = 'sky'):
+        if (type == 'sky'):
+            # TO-DO: generalizar (por ahora ocupa SIMBAD)
+            my_target = self.data_query['SIMBAD']['MAIN_ID'][0]
+            
+            aladin = Aladin(layout=Layout(width='50%'), target=my_target, fov=0.2)
+
+
+            button = widgets.Button(description="Select")
+            def on_button_clicked(b):
+                aladin.rectangular_selection()
+
+            button.on_click(on_button_clicked)
+            table_info = widgets.HTML(layout=Layout(height='auto', overflow='auto'))
+
+
+            box_layout = Layout(display='flex',
+                                flex_flow='row',
+                                align_items='stretch',
+                                width='100%',
+                                position='relative',
+                                overflow='hidden',
+                                height='100vh',
+                                margin='-100px 0 0 0',
+                                padding='100px 0 0 0 '
+                            )
+            box = Box(children=[aladin, button, table_info], layout=box_layout)
+            return box
+
 
     def addTable(self, data):
         pass
