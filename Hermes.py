@@ -8,6 +8,8 @@ from Services.RemoteServices import RemoteServices
 from ipyaladin import Aladin
 from ipywidgets import Layout, Box, widgets
 
+valid_search = ['cone_search', 'box_search']
+
 class HermesClassError(Exception):
     def __init__(self, *args):
         if args:
@@ -28,12 +30,10 @@ class Hermes():
         self.filters = {'search_type': None, 'ra/dec': [None, None]}
         self.data_query  = None
         
-
-
     @dispatch(str)
     def addFilter(self, search_type = None):
-        if (search_type == 'cone_search'):
-            self.filters['search_type'] = {'type' : 'cone_search'}
+        if (search_type in valid_search):
+            self.filters['search_type'] = {'type' : search_type}
         else:
             raise HermesClassError('search_type is invalid')
     
@@ -46,15 +46,17 @@ class Hermes():
 
     @dispatch(str, float)
     def addFilter(self, param_name, value):
-
-        if (self.filters['search_type'] is None):
-            return # TO-DO: manejar esto
-        
+        # TO-DO: match search_type with param_name. Determine if box_search and radius is allowed or not.
         if (param_name == 'radius'):
             self.filters['search_type']['radius'] = value
-
-        # TO-DO: width, height (box search)
-
+        
+        elif (param_name == 'width'):
+            self.filters['search_type']['width'] = value
+        elif (param_name == 'height'):
+            self.filters['search_type']['height'] = value
+        else:
+            raise HermesClassError('filter is invalid')
+    
     def startQuery(self): # start the query
         # Hacerlo síncrono
         remote_services = RemoteServices()

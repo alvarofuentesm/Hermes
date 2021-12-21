@@ -12,6 +12,10 @@ class QueryIRSA():
             table = Irsa.query_region( query_parameters['coordinates'],
                     catalog = my_catalog, spatial='Cone',
                     radius=query_parameters['search_type']['radius'])
+        elif (query_parameters['search_type']['type'] == 'box_search'):
+            table = Irsa.query_region( query_parameters['coordinates'],
+                    catalog = my_catalog, spatial='Box',
+                    width=query_parameters['search_type']['width'])
         else:
             table = None    
         

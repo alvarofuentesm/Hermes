@@ -11,7 +11,7 @@ class QueryMAST():
                                      radius = query_parameters['search_type']['radius'],  dataproduct_type = "timeseries")
         else:
             table = None
-        # TO-DO: box search
+        
         return table
     
 

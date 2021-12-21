@@ -13,7 +13,6 @@ class QuerySIMBAD():
         else:
             table = None    
         
-        # TO-DO: box search
         return table
 
 if __name__ == '__main__':

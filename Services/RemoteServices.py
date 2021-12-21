@@ -18,6 +18,11 @@ astroquery_services = [
     {'service_name': 'SIMBAD', 'catalogues' : [], 'description': 'Simbad service'}
 ]
 
+allowed_search_types = {
+    'cone_search': ['OAC', 'IRSA', 'MAST', 'SIMBAD'],
+    'box_search': ['OAC', 'IRSA'] 
+}
+
 
 class RemoteServices():
     def __init__(self):
@@ -41,14 +46,19 @@ class RemoteServices():
             elif (param == 'search_type'):
                 self.query_parameters['search_type'] = {}
                 self.query_parameters['search_type']['type'] = filters['search_type']['type'] 
-                self.query_parameters['search_type']['radius'] = filters['search_type']['radius']*u.arcsec
-                    
+                if (filters['search_type']['type'] == 'cone_search'):
+                    self.query_parameters['search_type']['radius'] = filters['search_type']['radius']*u.arcsec
+                elif (filters['search_type']['type'] == 'box_search'):
+                    self.query_parameters['search_type']['height'] = filters['search_type']['height']*u.arcsec
+                    self.query_parameters['search_type']['width'] = filters['search_type']['width']*u.arcsec
+
                 
     def startQuery(self):
         data = {}
         for service_instance in self.services:
             print(service_instance)
-            data[service_instance] = self.services[service_instance].startQuery(self.query_parameters)
+            if (service_instance in allowed_search_types[self.query_parameters['search_type']['type']]):
+                data[service_instance] = self.services[service_instance].startQuery(self.query_parameters)
 
         return data
 

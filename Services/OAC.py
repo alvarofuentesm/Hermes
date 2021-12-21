@@ -13,6 +13,16 @@ class QueryOAC():
                                   attribute=["time", "magnitude",
                                              "e_magnitude", "band",
                                              "instrument"])
+
+        elif (query_parameters['search_type']['type'] == 'box_search'):
+            table = OAC.query_region(coordinates=query_parameters['coordinates'],
+                                  width = query_parameters['search_type']['width'],
+                                  height = query_parameters['search_type']['height'],
+                                  quantity="photometry",
+                                  attribute=["time", "magnitude",
+                                             "e_magnitude", "band",
+                                             "instrument"])
+
         else:
             table = None    
         
