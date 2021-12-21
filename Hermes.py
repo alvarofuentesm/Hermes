@@ -8,18 +8,34 @@ from Services.RemoteServices import RemoteServices
 from ipyaladin import Aladin
 from ipywidgets import Layout, Box, widgets
 
+class HermesClassError(Exception):
+    def __init__(self, *args):
+        if args:
+            self.message = args[0]
+        else:
+            self.message = None
+
+    def __str__(self):
+        print('calling str')
+        if self.message:
+            return 'HermesClassError, {0} '.format(self.message)
+        else:
+            return 'HermesClassError has been raised'
 
 class Hermes():
     def __init__(self, dummy = {"test": "helloWorld", "test2": [1,2,3], "test3": ["1", "2", "3"]}):
         self.dummy = dummy
         self.filters = {'search_type': None, 'ra/dec': [None, None]}
         self.data_query  = None
+        
+
 
     @dispatch(str)
     def addFilter(self, search_type = None):
-        # TO-DO: verify search_type is valid
         if (search_type == 'cone_search'):
             self.filters['search_type'] = {'type' : 'cone_search'}
+        else:
+            raise HermesClassError('search_type is invalid')
     
     @dispatch(str, str)
     def addFilter(self, param_name, value):
