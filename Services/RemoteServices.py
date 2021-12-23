@@ -14,7 +14,7 @@ astroquery_services = [
     # https://astroquery.readthedocs.io/en/latest/mast/mast.html
     {'service_name': 'MAST', 'catalogues' : [], 'description': 'Barbara A. Mikulski Archive for Space Telescopes (MAST)'},
     # https://astroquery.readthedocs.io/en/latest/ipac/irsa/irsa.html
-    #{'service_name': 'IRSA', 'catalogues' : ['ptf_lightcurves'], 'description': 'Different types of queries on the catalogs present in the IRSA general catalog service'},
+    {'service_name': 'IRSA', 'catalogues' : ['ptf_lightcurves'], 'description': 'Different types of queries on the catalogs present in the IRSA general catalog service'},
     # https://astroquery.readthedocs.io/en/latest/simbad/simbad.html
     {'service_name': 'SIMBAD', 'catalogues' : [], 'description': 'Simbad service'}
 ]

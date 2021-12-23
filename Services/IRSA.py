@@ -5,22 +5,40 @@
 from astroquery.ipac.irsa import Irsa
 
 class QueryIRSA():
+    def __init__(self):
+        self.available_data_types = ['timeseries']
+
     def startQuery(self, query_parameters):
         print("Start query IRSA")
-        my_catalog = 'ptf_lightcurves'
-        if (query_parameters['search_type']['type'] == 'cone_search'):
-            table = Irsa.query_region( query_parameters['coordinates'],
-                    catalog = my_catalog, spatial='Cone',
-                    radius=query_parameters['search_type']['radius'])
-        elif (query_parameters['search_type']['type'] == 'box_search'):
-            table = Irsa.query_region( query_parameters['coordinates'],
-                    catalog = my_catalog, spatial='Box',
-                    width=query_parameters['search_type']['width'])
-        else:
-            table = None    
-        
-        # TO-DO: box search
-        return table
+        print("Start query SIMBAD")
+        full_data = {}
+        for type in self.available_data_types: 
+            print("query ", type)
+            full_data[type] = []
+
+            if (type == "timeseries"):
+                my_catalog = 'ptf_lightcurves'
+            else:
+                my_catalog = ''
+
+            if (query_parameters['search_type']['type'] == 'cone_search'):
+                table = Irsa.query_region( query_parameters['coordinates'],
+                        catalog = my_catalog, spatial='Cone',
+                        radius=query_parameters['search_type']['radius'])
+            elif (query_parameters['search_type']['type'] == 'box_search'):
+                table = Irsa.query_region( query_parameters['coordinates'],
+                        catalog = my_catalog, spatial='Box',
+                        width=query_parameters['search_type']['width'])
+            else:
+                continue 
+            
+            # TO-DO: box search
+            data_ = {}
+            data_["header"] = None
+            data_["data"] = table.copy()
+            full_data[type].append( data_.copy() )
+ 
+        return full_data
 
 if __name__ == '__main__':
     import astropy.units as u
@@ -62,7 +80,7 @@ if __name__ == '__main__':
 
     #print(table.columns)   # Dict of table columns (access by column name, index, or slice)
     print(table.colnames)  # List of column names
-    
+    print(table.columns) 
     print(len(table))      # Number of table rows
 
     #print(table.meta)      # Dict of meta-data
