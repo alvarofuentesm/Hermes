@@ -9,6 +9,11 @@ from Services.LocalServices import LocalServices
 from ipyaladin import Aladin
 from ipywidgets import Layout, Box, widgets
 
+from astropy.visualization import astropy_mpl_style
+import matplotlib.pyplot as plt
+
+
+
 valid_search = ['cone_search', 'box_search']
 
 class HermesClassError(Exception):
@@ -147,7 +152,18 @@ class Hermes():
             return box
 
         elif (type == "spectrum"):
-            return
+            # TO-DO: generalizar (por ahora ocupa MAST)
+            plt.style.use(astropy_mpl_style)
+
+            print(len(self.getTables('MAST', 'spectrum')))
+            for i in range(len(self.getTables('MAST', 'spectrum'))):
+                data = self.getTables('MAST', 'spectrum')[i]['data']
+                if (len(data.shape) == 2):            
+                    plt.figure()
+                    #plt.title( )
+                    plt.imshow(data, cmap='viridis')
+                    plt.colorbar()
+                    plt.show()
 
     def addTable(self, data):
         pass
