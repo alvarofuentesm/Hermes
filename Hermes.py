@@ -115,12 +115,12 @@ class Hermes():
         self.filters=data
         # guardar estado de objeto en archivo .hermes
         return 
-        return 
 
     def generateVisualization(self, type = 'sky'):
         if (type == 'sky'):
             # TO-DO: generalizar (por ahora ocupa SIMBAD)
-            my_target = self.data_query['SIMBAD']['MAIN_ID'][0]
+            #my_target = self.data_query['SIMBAD']['MAIN_ID'][0]
+            my_target = self.getTables('SIMBAD', 'timeseries')[0]['data']['MAIN_ID'][0]
             
             aladin = Aladin(layout=Layout(width='50%'), target=my_target, fov=0.2)
 
@@ -146,6 +146,8 @@ class Hermes():
             box = Box(children=[aladin, button, table_info], layout=box_layout)
             return box
 
+        elif (type == "spectrum"):
+            return
 
     def addTable(self, data):
         pass

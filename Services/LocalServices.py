@@ -11,7 +11,7 @@ class LocalServices():
     def startQuery(self):
         data_full = {}
 
-        data_full['timeserie'] = []
+        data_full['timeseries'] = []
 
         for manifest in self.services:
             print(manifest['path'])
@@ -26,6 +26,6 @@ class LocalServices():
             table['data'] = QTable.from_pandas(data_)
             table['header'] = None
 
-            data_full['timeserie'].append(table)
+            data_full['timeseries'].append(table)
         
         return data_full
