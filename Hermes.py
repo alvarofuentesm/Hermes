@@ -4,6 +4,7 @@ Hermes class file
 from multipledispatch import dispatch
 
 from Services.RemoteServices import RemoteServices
+from Services.LocalServices import LocalServices
 
 from ipyaladin import Aladin
 from ipywidgets import Layout, Box, widgets
@@ -25,10 +26,10 @@ class HermesClassError(Exception):
             return 'HermesClassError has been raised'
 
 class Hermes():
-    def __init__(self, dummy = {"test": "helloWorld", "test2": [1,2,3], "test3": ["1", "2", "3"]}):
-        self.dummy = dummy
-        self.filters = {'search_type': None, 'ra/dec': [None, None]}
+    def __init__(self):
+        self.filters = {'search_type': None, 'ra/dec': [None, None], 'local_services' : []}
         self.data_query  = None
+        self.local_query = None
         
     @dispatch(str)
     def addFilter(self, search_type = None):
@@ -58,6 +59,9 @@ class Hermes():
             raise HermesClassError('filter is invalid')
     
     def startQuery(self): # start the query
+        local_services = LocalServices(self.filters['local_services'])
+        self.local_query = local_services.startQuery()
+
         # Hacerlo síncrono
         remote_services = RemoteServices()
         remote_services.addQuery(self.filters)
@@ -74,7 +78,21 @@ class Hermes():
         
     def getFilters(self):
         return self.filters
-        
+
+    def getTables(self, service_name, type_data):
+        data_ = self.data_query[service_name][type_data].copy()
+        return data_
+
+    def getLocalTables(self, dummy = None):
+        return self.local_query
+
+    def addLocalService(self, path, column_available = True, separator = ',',  column_names = [], header = None):
+        # TO-DO: check path existence in os or already in filters
+        self.filters['local_services'].append( {'path': path, 'column_available': column_available, 'separator': separator,  'column_names': column_names, 'header': header} )
+
+    def getLocalServices(self):
+        return self.filters['local_services']
+
     def saveHermes(self, path = '',name = '',):
         import json        
         if name == '':

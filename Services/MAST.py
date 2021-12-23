@@ -120,7 +120,7 @@ if __name__ == '__main__':
         full_data[type] = []
 
         table = Observations.query_criteria(coordinates = test_coords, radius = test_radius,  dataproduct_type = type)
-
+        print(table)
         if (type == "spectrum"):
             data_products_by_obs = Observations.get_product_list(table[0]) # the first one (cause the time required)
         else:
@@ -136,7 +136,14 @@ if __name__ == '__main__':
                 if (data is None):
                     hdul.close()
                     continue    
-        
+
+                if (len(data.shape) == 2):
+                    plt.figure()
+                    #plt.title(manifest['obs_id'][i] + '\n' + manifest['dataproduct_type'][i])
+                    plt.imshow(data, cmap='viridis')
+                    plt.colorbar()
+                    plt.show()
+            
                 data_ = {}
                 data_["header"] = hdul[1].header.copy()
                 data_["data"] = data.copy()
