@@ -5,15 +5,28 @@ from astroquery.simbad import Simbad
 
 
 class QuerySIMBAD():
+    def __init__(self):
+        self.available_data_types = ['timeseries']
+
     def startQuery(self, query_parameters):
         print("Start query SIMBAD")
-        if (query_parameters['search_type']['type'] == 'cone_search'):
-            table = Simbad.query_region(coordinates = query_parameters['coordinates'], 
-                                            radius=query_parameters['search_type']['radius'])
-        else:
-            table = None    
+        full_data = {}
+        for type in self.available_data_types: 
+            print("query ", type)
+            full_data[type] = []
+            if (query_parameters['search_type']['type'] == 'cone_search'):
+                table = Simbad.query_region(coordinates = query_parameters['coordinates'], 
+                                                radius=query_parameters['search_type']['radius'])
+            else:
+                continue    
+            
+            data_ = {}
+            data_["header"] = None
+            data_["data"] = table.copy()
+            full_data[type].append( data_.copy() )
+
         
-        return table
+        return full_data
 
 if __name__ == '__main__':
     import astropy.units as u
@@ -27,5 +40,7 @@ if __name__ == '__main__':
     
     table = Simbad.query_region(coordinates = test_coords, radius=test_radius)
     print(table)
+
+    print(table.columns)
 
 
