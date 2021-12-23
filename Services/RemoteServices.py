@@ -7,15 +7,16 @@ from .IRSA import QueryIRSA
 import astropy.units as u
 import astropy.coordinates as coord
 
+
 astroquery_services = [
     # https://astroquery.readthedocs.io/en/latest/oac/oac.html
-    {'service_name': 'OAC', 'catalogues' : [], 'description': 'Open Astronomy Catalog REST API for easy access to data of supernovae, Tidal Disruption Events (TDEs) and kilonovae. '}, 
+    #{'service_name': 'OAC', 'catalogues' : [], 'description': 'Open Astronomy Catalog REST API for easy access to data of supernovae, Tidal Disruption Events (TDEs) and kilonovae. '}, 
     # https://astroquery.readthedocs.io/en/latest/mast/mast.html
     {'service_name': 'MAST', 'catalogues' : [], 'description': 'Barbara A. Mikulski Archive for Space Telescopes (MAST)'},
     # https://astroquery.readthedocs.io/en/latest/ipac/irsa/irsa.html
-    {'service_name': 'IRSA', 'catalogues' : ['ptf_lightcurves'], 'description': 'Different types of queries on the catalogs present in the IRSA general catalog service'},
+    #{'service_name': 'IRSA', 'catalogues' : ['ptf_lightcurves'], 'description': 'Different types of queries on the catalogs present in the IRSA general catalog service'},
     # https://astroquery.readthedocs.io/en/latest/simbad/simbad.html
-    {'service_name': 'SIMBAD', 'catalogues' : [], 'description': 'Simbad service'}
+    #{'service_name': 'SIMBAD', 'catalogues' : [], 'description': 'Simbad service'}
 ]
 
 allowed_search_types = {

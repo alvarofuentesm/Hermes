@@ -2,6 +2,7 @@
 # https://mast.stsci.edu/api/v0/_c_a_o_mfields.html
 
 from astroquery.mast import Observations
+from astropy.io import fits
 
 class QueryMAST():
     def __init__(self):
@@ -9,20 +10,49 @@ class QueryMAST():
 
     def startQuery(self, query_parameters):
         print("Start query MAST")
-        if (query_parameters['search_type']['type'] == 'cone_search'):
-            table = Observations.query_criteria(coordinates = query_parameters['coordinates'],
-                                     radius = query_parameters['search_type']['radius'],  dataproduct_type = "timeseries")
-        else:
-            table = None
-        
-        return table
+
+        full_data = {}
+        for type in self.available_data_types: 
+            print("query ", type)
+            full_data[type] = []
+
+            if (query_parameters['search_type']['type'] == 'cone_search'):
+                table = Observations.query_criteria(coordinates = query_parameters['coordinates'],
+                                        radius = query_parameters['search_type']['radius'],  dataproduct_type = type)
+            else:
+                continue
+
+            if (type == "spectrum"):
+                data_products_by_obs = Observations.get_product_list(table[0]) # the first one (cause the time required)
+            else:
+                data_products_by_obs = Observations.get_product_list(table) 
+            
+            manifest = Observations.download_products(data_products_by_obs)
+
+            for i, filename in enumerate(manifest['Local Path']):
+                if (filename.endswith('.fits') ):
+                    hdul = fits.open(filename)  # open a FITS file
+                    data = hdul[1].data
+                    #print(data)
+                    if (data is None):
+                        hdul.close()
+                        continue    
+            
+                    data_ = {}
+                    data_["header"] = hdul[1].header.copy()
+                    data_["data"] = data.copy()
+
+                    full_data[type].append( data_.copy() )
+                    hdul.close()
+            
+            
+        return full_data
     
 
 if __name__ == '__main__':
     import numpy as np
     import astropy.units as u
     import astropy.coordinates as coord
-    from astropy.io import fits
 
     from astropy.visualization import astropy_mpl_style
     import matplotlib.pyplot as plt
@@ -40,11 +70,13 @@ if __name__ == '__main__':
     test_radius = 10*u.arcsec
 
     print(Observations.list_missions())
-
+    '''
     #type = "spectrum" 
     type = "timeseries"
     #table = Observations.query_criteria(coordinates = test_coords, radius = test_radius,  dataproduct_type = "timeseries")
     table = Observations.query_criteria(coordinates = test_coords, radius = test_radius,  dataproduct_type = type)
+    
+    
     print(table)
     print(np.unique(table['provenance_name']))
 
@@ -79,3 +111,36 @@ if __name__ == '__main__':
                 print(data.columns)
 
             hdul.close()
+    '''
+    print("Start query MAST")
+
+    full_data = {}
+    for type in ["timeseries", "spectrum" ]: 
+        print("query ", type)
+        full_data[type] = []
+
+        table = Observations.query_criteria(coordinates = test_coords, radius = test_radius,  dataproduct_type = type)
+
+        if (type == "spectrum"):
+            data_products_by_obs = Observations.get_product_list(table[0]) # the first one (cause the time required)
+        else:
+            data_products_by_obs = Observations.get_product_list(table) 
+        
+        manifest = Observations.download_products(data_products_by_obs)
+
+        for i, filename in enumerate(manifest['Local Path']):
+            if (filename.endswith('.fits') ):
+                hdul = fits.open(filename)  # open a FITS file
+                data = hdul[1].data
+                print(data)
+                if (data is None):
+                    hdul.close()
+                    continue    
+        
+                data_ = {}
+                data_["header"] = hdul[1].header.copy()
+                data_["data"] = data.copy()
+
+                full_data[type].append( data_.copy() )
+                hdul.close()
+        
