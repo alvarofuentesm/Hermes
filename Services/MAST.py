@@ -1,6 +1,6 @@
 # https://astroquery.readthedocs.io/en/latest/mast/mast.html
 # https://mast.stsci.edu/api/v0/_c_a_o_mfields.html
-
+# https://docs.astropy.org/en/stable/io/fits/api/images.html#astropy.io.fits.ImageHDU
 from astroquery.mast import Observations
 from astropy.io import fits
 
@@ -22,7 +22,7 @@ class QueryMAST():
             else:
                 continue
 
-            if (type == "spectrum"):
+            if (type == "spectrum"): 
                 data_products_by_obs = Observations.get_product_list(table[0]) # the first one (cause the time required)
             else:
                 data_products_by_obs = Observations.get_product_list(table) 

@@ -4,30 +4,43 @@
 from astroquery.oac import OAC
 
 class QueryOAC():
+    def __init__(self):
+        self.available_data_types = ['timeseries']
+
     def startQuery(self, query_parameters):
         print("Start query OAC")
-        if (query_parameters['search_type']['type'] == 'cone_search'):
-            table = OAC.query_region(coordinates=query_parameters['coordinates'],
-                                  radius = query_parameters['search_type']['radius'],
-                                  quantity="photometry",
-                                  attribute=["time", "magnitude",
-                                             "e_magnitude", "band",
-                                             "instrument"])
+        full_data = {}
+        for type in self.available_data_types: 
+            print("query ", type)
+            full_data[type] = []
 
-        elif (query_parameters['search_type']['type'] == 'box_search'):
-            table = OAC.query_region(coordinates=query_parameters['coordinates'],
-                                  width = query_parameters['search_type']['width'],
-                                  height = query_parameters['search_type']['height'],
-                                  quantity="photometry",
-                                  attribute=["time", "magnitude",
-                                             "e_magnitude", "band",
-                                             "instrument"])
+            if (query_parameters['search_type']['type'] == 'cone_search'):
+                table = OAC.query_region(coordinates=query_parameters['coordinates'],
+                                    radius = query_parameters['search_type']['radius'],
+                                    quantity="photometry",
+                                    attribute=["time", "magnitude",
+                                                "e_magnitude", "band",
+                                                "instrument"])
 
-        else:
-            table = None    
-        
-        # TO-DO: box search
-        return table
+            elif (query_parameters['search_type']['type'] == 'box_search'):
+                table = OAC.query_region(coordinates=query_parameters['coordinates'],
+                                    width = query_parameters['search_type']['width'],
+                                    height = query_parameters['search_type']['height'],
+                                    quantity="photometry",
+                                    attribute=["time", "magnitude",
+                                                "e_magnitude", "band",
+                                                "instrument"])
+
+            else:
+                continue
+            
+            data_ = {}
+            data_["header"] = None
+            data_["data"] = table.copy()
+            full_data[type].append( data_.copy() )
+
+
+        return full_data
 
 
 if __name__ == '__main__':
@@ -66,7 +79,7 @@ if __name__ == '__main__':
                                              "e_magnitude", "band",
                                              "instrument"])
 
-    print(photometry_table)
+    print(photometry_table.columns)
 
         
 
