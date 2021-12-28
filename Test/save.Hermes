@@ -1,0 +1,1 @@
+{"search_type": {"type": "cone_search", "radius": 10.0}, "ra/dec": ["12:26:27.011", "+31:13:20.55"], "local_services": [{"path": "datos/lc_HD52504.tess", "column_available": ",", "separator": true, "column_names": [], "header": null}, {"path": "datos/lc_HD113016.tess", "column_available": ",", "separator": true, "column_names": [], "header": null}]}
