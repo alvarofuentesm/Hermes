@@ -98,7 +98,7 @@ class Hermes():
     def getLocalServices(self):
         return self.filters['local_services']
 
-    def saveHermes(self, path = '',name = '',):
+    def saveHermes(self, name = '',):
         import json        
         if name == '':
             with open('save.Hermes', 'w') as fout:
